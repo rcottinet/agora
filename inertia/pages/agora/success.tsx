@@ -6,7 +6,7 @@ export default function SuccessAgora() {
       <Head title="SuccessAgora" />
 
       <div>
-        <span className={'text-xl'}>Successfully created join agora!</span>
+        <span className={'text-xl'}>Successfully joined!</span>
       </div>
     </>
   )

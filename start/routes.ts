@@ -11,22 +11,31 @@ import router from '@adonisjs/core/services/router'
 import { createAgoraValidator } from '#validators/agora'
 import Agora from '#models/agora'
 import { createParticipantValidator } from '#validators/participant'
+import env from '#start/env'
+import transmit from '@adonisjs/transmit/services/main'
+
+transmit.registerRoutes()
 
 // route to manage agora
 router.on('/').renderInertia('agora/new')
 router.post('/', async ({ request, response }) => {
   const payload = await request.validateUsing(createAgoraValidator)
   const createdAgora = await Agora.create(payload)
-  console.log(createdAgora)
-
   return response.redirect(`/${createdAgora.id}`)
 })
+router.on('/success').renderInertia('agora/success')
 router.on('/:id').setHandler(async ({ request, inertia }) => {
   const { id } = request.params()
   const agora = await Agora.findOrFail(id)
-  const url = 'localhost:3333'
+  await agora.load('participants')
+  const url = `${env.get('HOST')}:${env.get('PORT')}`
   const inviteUrl = `${url}/join/${agora.inviteCode}`
-  return inertia.render('agora/show', { title: agora.title, inviteUrl })
+  return inertia.render('agora/show', {
+    id: agora.id,
+    title: agora.title,
+    inviteUrl,
+    participants: agora.participants,
+  })
 })
 
 // routes to join an agora
@@ -39,13 +48,17 @@ router.on('/join/:code').setHandler(async ({ request, inertia }) => {
 })
 router.post('/join/:code', async ({ request, inertia, response }) => {
   const { code } = request.params()
-  const payload = await request.validateUsing(createParticipantValidator)
+  const newParticipant = await request.validateUsing(createParticipantValidator)
   const agora = await Agora.findBy('inviteCode', code)
   if (!agora) return inertia.render('agora/not_found')
 
-  await agora.related('participants').create(payload)
-  return response.redirect(`/agora/success`)
+  const participant = await agora.related('participants').create(newParticipant)
+
+  await transmit.broadcast(`${agora.id}/participants`, {
+    participant: participant.serialize(),
+  })
+
+  return response.redirect(`/success`)
 })
-router.on('/agora/success').renderInertia('agora/success')
 
 router.on('*').renderInertia('errors/not_found')
