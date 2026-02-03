@@ -1,5 +1,6 @@
 import { Head } from '@inertiajs/react'
 import { useEffect, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { transmit } from '~/transmit'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
@@ -16,7 +17,7 @@ export default function ShowAgora({ id, title, inviteUrl, participants}: { id: s
     const subscription = transmit.subscription(`${id}/participants`)
     subscription.create().then(() => {
       subscription.onMessage((data: {participant : {id: string, name: string, joinedAt: string}}) => {
-        setCurrentParticipants((prev) => [...prev, data.participant])
+        setCurrentParticipants((prev) => [data.participant, ...prev])
       })
     })
 
@@ -30,7 +31,7 @@ export default function ShowAgora({ id, title, inviteUrl, participants}: { id: s
     <>
       <Head title={title} />
 
-      <div className="flex flex-col gap-6 p-4 max-w-2xl mx-auto min-h-screen justify-center">
+      <div className="flex flex-col gap-6 p-4 max-w-2xl mx-auto min-h-screen pt-20">
         <Card>
           <CardHeader>
              <CardTitle>{title}</CardTitle>
@@ -49,15 +50,33 @@ export default function ShowAgora({ id, title, inviteUrl, participants}: { id: s
           </CardHeader>
           <CardContent>
             <ul className="space-y-3">
-              {currentParticipants.length === 0 ? (
-                <p className="text-muted-foreground text-sm">No participants yet.</p>
-              ) : (
-                currentParticipants.map((participant, index) => (
-                  <li key={index} className="p-3 bg-white border-2 border-border rounded-base shadow-shadow flex items-center font-base">
-                    <span>{participant.name}</span>
-                  </li>
-                ))
-              )}
+              <AnimatePresence mode="popLayout">
+                {currentParticipants.length === 0 ? (
+                  <motion.p
+                    key="empty"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="text-muted-foreground text-sm"
+                  >
+                    No participants yet.
+                  </motion.p>
+                ) : (
+                  currentParticipants.map((participant) => (
+                    <motion.li
+                      layout
+                      key={participant.id}
+                      initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{ duration: 0.3, type: "spring", bounce: 0.3 }}
+                      className="p-3 bg-white border-2 border-border rounded-base shadow-shadow flex items-center font-base"
+                    >
+                      <span className="w-2 h-2 rounded-full bg-green-500 mr-3 animate-pulse" />
+                      <span>{participant.name}</span>
+                    </motion.li>
+                  ))
+                )}
+              </AnimatePresence>
             </ul>
           </CardContent>
         </Card>

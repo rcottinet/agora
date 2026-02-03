@@ -17,11 +17,15 @@ export default function NewAgora() {
   return (
     <>
       <Head title="New Agora" />
-      <div className="flex min-h-screen items-center justify-center p-4">
-        <Card className="w-full max-w-md">
+      <div className="relative flex min-h-screen items-center justify-center p-4 overflow-hidden bg-secondary/20">
+        <Card className="w-full max-w-md z-10 relative bg-white">
           <CardHeader>
-            <CardTitle>Create a new Agora</CardTitle>
-            <CardDescription>Start a new session for your class or meeting.</CardDescription>
+            <div className="relative w-fit mx-auto mb-4">
+               <div className="relative z-10 bg-main px-4 py-2 border-2 border-black rounded-base shadow-shadow">
+                  <CardTitle className="text-main-foreground">Create a new Agora</CardTitle>
+               </div>
+            </div>
+            <CardDescription className="text-center">Start a new session for your class or meeting.</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={submit} className="space-y-4">
