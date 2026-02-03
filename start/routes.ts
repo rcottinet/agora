@@ -28,7 +28,7 @@ router.on('/:id').setHandler(async ({ request, inertia }) => {
   const { id } = request.params()
   const agora = await Agora.findOrFail(id)
   await agora.load('participants')
-  const url = `${env.get('HOST')}:${env.get('PORT')}`
+  const url = `${env.get('URL') ?? 'http://localhost:3333'}`
   const inviteUrl = `${url}/join/${agora.inviteCode}`
   return inertia.render('agora/show', {
     id: agora.id,
