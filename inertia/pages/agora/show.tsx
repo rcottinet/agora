@@ -59,11 +59,15 @@ export default function ShowAgora({ id, title, inviteUrl, participants}: { id: s
                     className="p-3 flex items-center justify-between gap-2 bg-secondary/10 rounded-base border-2 border-dashed border-border text-sm font-mono break-all font-base hover:bg-background cursor-pointer transition-colors"
                   >
                     {inviteUrl}
-                    {hasCopied ? <Check className="h-4 w-4" /> : <ClipboardCopy className="h-4 w-4" />}
+                    {hasCopied ? (
+                      <Check className="h-4 w-4" />
+                    ) : (
+                      <ClipboardCopy className="h-4 w-4" />
+                    )}
                   </div>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{hasCopied ? "Copied!" : "Click to copy"}</p>
+                  <p>{hasCopied ? 'Copied!' : 'Click to copy'}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -98,7 +102,9 @@ export default function ShowAgora({ id, title, inviteUrl, participants}: { id: s
                       className="p-3 bg-white border-2 border-border rounded-base shadow-shadow flex items-center font-base"
                     >
                       <span className="w-2 h-2 rounded-full bg-green-500 mr-3 animate-pulse" />
+                      <div className={"flex-1 flex justify-between"}>
                       <span>{participant.name}</span>
+                      </div>
                     </motion.li>
                   ))
                 )}
