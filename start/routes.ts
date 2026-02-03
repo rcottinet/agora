@@ -13,9 +13,11 @@ import Agora from '#models/agora'
 import { createParticipantValidator } from '#validators/participant'
 import env from '#start/env'
 import transmit from '@adonisjs/transmit/services/main'
+const HealthChecksController = () => import('#controllers/health_checks_controller')
 
 transmit.registerRoutes()
 
+router.get('/health', [HealthChecksController])
 // route to manage agora
 router.on('/').renderInertia('agora/new')
 router.post('/', async ({ request, response }) => {
