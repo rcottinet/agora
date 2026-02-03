@@ -34,7 +34,7 @@ router.on('/:id').setHandler(async ({ request, inertia }) => {
     id: agora.id,
     title: agora.title,
     inviteUrl,
-    participants: agora.participants,
+    participants: agora.participants.sort((a, b) => (a.joinedAt < b.joinedAt ? 1 : -1)),
   })
 })
 
