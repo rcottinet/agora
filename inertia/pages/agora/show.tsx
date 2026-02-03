@@ -1,6 +1,7 @@
 import { Head } from '@inertiajs/react'
 import { useEffect, useState } from 'react'
 import { transmit } from '~/transmit'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 type Participant = {
   id: string;
@@ -27,25 +28,39 @@ export default function ShowAgora({ id, title, inviteUrl, participants}: { id: s
 
   return (
     <>
-      <Head title="ShowAgora" />
+      <Head title={title} />
 
-      <div className={'m-5 border p-5 rounded-lg'}>
-        <span className={'text-xl'}>{title}</span>
-        <span className={'text-sm block mt-2'}>Invite URL: {inviteUrl}</span>
-      </div>
-      <div className={'m-5 border p-5 rounded-lg'}>
-        <span className={'text-xl'}>Participants - ({currentParticipants.length})</span>
-        <ul className={'list-disc list-inside mt-2'}>
-          {currentParticipants.length === 0 ? (
-            <span>No participants yet.</span>
-          ) : (
-            currentParticipants.map((participant, index) => (
-              <li key={index}>
-                {participant.name}
-              </li>
-            ))
-          )}
-        </ul>
+      <div className="flex flex-col gap-6 p-4 max-w-2xl mx-auto min-h-screen justify-center">
+        <Card>
+          <CardHeader>
+             <CardTitle>{title}</CardTitle>
+             <CardDescription>Share this URL to invite others</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="p-3 bg-secondary/10 rounded-base border-2 border-dashed border-border text-sm font-mono break-all font-base">
+                {inviteUrl}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Participants ({currentParticipants.length})</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-3">
+              {currentParticipants.length === 0 ? (
+                <p className="text-muted-foreground text-sm">No participants yet.</p>
+              ) : (
+                currentParticipants.map((participant, index) => (
+                  <li key={index} className="p-3 bg-white border-2 border-border rounded-base shadow-shadow flex items-center font-base">
+                    <span>{participant.name}</span>
+                  </li>
+                ))
+              )}
+            </ul>
+          </CardContent>
+        </Card>
       </div>
     </>
   )
