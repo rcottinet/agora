@@ -38,8 +38,8 @@ export default function ShowAgora({ id, title, inviteUrl, participants}: { id: s
     <>
       <Head title={title} />
 
-      <div className="flex flex-col gap-6 p-4 max-w-2xl mx-auto min-h-screen pt-20">
-        <Card>
+      <div className="flex flex-col md:flex-row gap-6 p-4 max-w-2xl md:max-w-5xl mx-auto min-h-screen pt-20 md:items-start">
+        <Card className="flex-1">
           <CardHeader>
             <CardTitle>{title}</CardTitle>
             <CardDescription>Share this URL to invite others</CardDescription>
@@ -59,7 +59,7 @@ export default function ShowAgora({ id, title, inviteUrl, participants}: { id: s
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="flex-1">
           <CardHeader>
             <CardTitle>Participants ({currentParticipants.length})</CardTitle>
           </CardHeader>
