@@ -5,7 +5,7 @@ import { transmit } from '~/transmit'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import QRCode from 'react-qrcode-logo'
 import { Button } from '@/components/ui/button'
-import { Copy } from 'lucide-react'
+import { Check, ClipboardCopy } from 'lucide-react'
 
 type Participant = {
   id: string;
@@ -15,6 +15,7 @@ type Participant = {
 
 export default function ShowAgora({ id, title, inviteUrl, participants}: { id: string, title: string, inviteUrl: string, participants: Participant[] }) {
   const [currentParticipants, setCurrentParticipants] = useState<Participant[]>([...participants])
+  const [hasCopied, setHasCopied] = useState(false)
 
   useEffect(() => {
     const subscription = transmit.subscription(`${id}/participants`)
@@ -32,6 +33,8 @@ export default function ShowAgora({ id, title, inviteUrl, participants}: { id: s
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(inviteUrl)
+    setHasCopied(true)
+    setTimeout(() => setHasCopied(false), 2000)
   }
 
   return (
@@ -53,7 +56,7 @@ export default function ShowAgora({ id, title, inviteUrl, participants}: { id: s
             <div className="p-3 flex items-center justify-between bg-secondary/10 rounded-base border-2 border-dashed border-border text-sm font-mono break-all font-base">
               {inviteUrl}
               <Button size="icon" variant="neutral" onClick={copyToClipboard}>
-                <Copy />
+                {hasCopied ? <Check /> : <ClipboardCopy />}
               </Button>
             </div>
           </CardContent>
