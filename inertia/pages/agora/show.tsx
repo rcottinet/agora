@@ -4,8 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { transmit } from '~/transmit'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import QRCode from 'react-qrcode-logo'
-import { Button } from '@/components/ui/button'
 import { Check, ClipboardCopy } from 'lucide-react'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
 type Participant = {
   id: string;
@@ -49,16 +49,24 @@ export default function ShowAgora({ id, title, inviteUrl, participants}: { id: s
           </CardHeader>
           <CardContent>
             <div className="flex justify-center p-4">
-              <QRCode
-                size={200}
-                value={inviteUrl} />
+              <QRCode size={200} value={inviteUrl} />
             </div>
-            <div className="p-3 flex items-center justify-between gap-2 bg-secondary/10 rounded-base border-2 border-dashed border-border text-sm font-mono break-all font-base">
-              {inviteUrl}
-              <Button size="icon" variant="neutral" onClick={copyToClipboard}>
-                {hasCopied ? <Check /> : <ClipboardCopy />}
-              </Button>
-            </div>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div
+                    onClick={copyToClipboard}
+                    className="p-3 flex items-center justify-between gap-2 bg-secondary/10 rounded-base border-2 border-dashed border-border text-sm font-mono break-all font-base hover:bg-background cursor-pointer transition-colors"
+                  >
+                    {inviteUrl}
+                    {hasCopied ? <Check className="h-4 w-4" /> : <ClipboardCopy className="h-4 w-4" />}
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{hasCopied ? "Copied!" : "Click to copy"}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </CardContent>
         </Card>
 

@@ -1,6 +1,5 @@
-import { Head, Link } from '@inertiajs/react'
+import { Head } from '@inertiajs/react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 
 export default function SuccessAgora() {
   return (
@@ -14,9 +13,6 @@ export default function SuccessAgora() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="font-base">You have successfully joined the Agora.</p>
-            <Button asChild className="w-full">
-                <Link href="/">Back to Home</Link>
-            </Button>
           </CardContent>
         </Card>
       </div>
