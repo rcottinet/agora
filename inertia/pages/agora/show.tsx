@@ -53,7 +53,7 @@ export default function ShowAgora({ id, title, inviteUrl, participants}: { id: s
                 size={200}
                 value={inviteUrl} />
             </div>
-            <div className="p-3 flex items-center justify-between bg-secondary/10 rounded-base border-2 border-dashed border-border text-sm font-mono break-all font-base">
+            <div className="p-3 flex items-center justify-between gap-2 bg-secondary/10 rounded-base border-2 border-dashed border-border text-sm font-mono break-all font-base">
               {inviteUrl}
               <Button size="icon" variant="neutral" onClick={copyToClipboard}>
                 {hasCopied ? <Check /> : <ClipboardCopy />}
