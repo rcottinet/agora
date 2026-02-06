@@ -1,4 +1,6 @@
 FROM node:22.16.0-alpine3.22 AS base
+# install curl for health checks
+RUN apk add --no-cache curl
 
 # All deps stage
 FROM base AS deps
