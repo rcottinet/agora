@@ -14,10 +14,26 @@ import { createParticipantValidator } from '#validators/participant'
 import env from '#start/env'
 import transmit from '@adonisjs/transmit/services/main'
 const HealthChecksController = () => import('#controllers/health_checks_controller')
+const GamesController = () => import('#controllers/games_controller')
 
 transmit.registerRoutes()
 
 router.get('/health', [HealthChecksController])
+
+// Battleship multiplayer mini-game (separate from the Agora flow).
+// Registered before the dynamic "/:id" agora route so "/play" is matched first.
+router
+  .group(() => {
+    router.get('/', [GamesController, 'new'])
+    router.post('/', [GamesController, 'create'])
+    router.get('/join/:code', [GamesController, 'joinForm'])
+    router.post('/join/:code', [GamesController, 'join'])
+    router.get('/:id', [GamesController, 'show'])
+    router.post('/:id/place', [GamesController, 'place'])
+    router.post('/:id/fire', [GamesController, 'fire'])
+  })
+  .prefix('/play')
+
 // route to manage agora
 router.on('/').renderInertia('agora/new')
 router.post('/', async ({ request, response }) => {
