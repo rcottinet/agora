@@ -1,4 +1,4 @@
-import { Head, router } from '@inertiajs/react'
+import { Head, Link, router } from '@inertiajs/react'
 import { useEffect, useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import QRCode from 'react-qrcode-logo'
@@ -7,6 +7,7 @@ import {
   Check,
   ClipboardCopy,
   Flame,
+  RotateCcw,
   RotateCw,
   Shuffle,
   Skull,
@@ -423,6 +424,15 @@ function Battle(props: ShowProps) {
           <OwnBoard me={me} boardSize={boardSize} fleet={fleet} />
         </CardContent>
       </Card>
+
+      {finished ? (
+        <Button asChild className="w-full">
+          <Link href="/play">
+            <RotateCcw className="h-4 w-4" />
+            Nouvelle partie
+          </Link>
+        </Button>
+      ) : null}
     </div>
   )
 }
