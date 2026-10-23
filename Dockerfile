@@ -1,4 +1,4 @@
-FROM node:22.16.0-alpine3.22 AS base
+FROM node:22.23.4-alpine3.23 AS base
 # install curl for health checks
 RUN apk add --no-cache curl
 
